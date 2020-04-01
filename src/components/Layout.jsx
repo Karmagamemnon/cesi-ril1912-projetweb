@@ -22,11 +22,9 @@ export const Layout = (props) => {
     return <Container maxWidth="md">
         <AppBar position="static">
             <Toolbar>
-                <Link href="/" color="inherit">
-                    <IconButton edge="start" className={classes.homeButton} color="inherit" aria-label="menu">
-                        <HomeIcon fontSize="large" color="inherit" />
-                    </IconButton>
-                </Link>
+                <IconButton edge="start" className={classes.homeButton} color="inherit" aria-label="menu" href="/">
+                    <HomeIcon fontSize="large" color="inherit" />
+                </IconButton>
                 <Typography className={classes.link} variant="h5">
                     <Link href="/tickets" color="inherit" underline="none">
                         Tickets

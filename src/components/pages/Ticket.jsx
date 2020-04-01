@@ -1,22 +1,35 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
-import PropTypes from 'prop-types';
+import AppBar from '@material-ui/core/AppBar';
 import Box from '@material-ui/core/Box';
 import DateFnsUtils from '@date-io/date-fns';
 import FormControl from '@material-ui/core/FormControl';
 import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
 import Input from '@material-ui/core/Input';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
+import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
-import { UrgencySelect } from '../UrgencySelect';
+import BuildIcon from '@material-ui/icons/Build';
+import ConfirmationNumberIcon from '@material-ui/icons/ConfirmationNumber';
+import RecordVoiceOverIcon from '@material-ui/icons/RecordVoiceOver';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import SaveIcon from '@material-ui/icons/Save';
 
+import { CategorySelect } from '../CategorySelect';
+import { UrgencySelect } from '../UrgencySelect';
 
 const useStyles = makeStyles((theme) => ({
     marginTop: { marginTop: theme.spacing(2) },
     marginRight: { marginRight: theme.spacing(2) },
+    title: {
+        flexGrow: 1,
+        marginLeft: theme.spacing(2)
+    },
 }));
 
 export const Ticket = (props) => {
@@ -25,8 +38,10 @@ export const Ticket = (props) => {
 
     const [ticket, setTicket] = React.useState(props.ticket);
 
-    const onChangeInput = (prop) => (event) => {
-        setTicket({ ...ticket, [prop]: event.target.value });
+    const onChangeInput = (prop, shouldParseInt) => (event) => {
+        shouldParseInt = shouldParseInt || false;
+        const value = shouldParseInt ? parseInt(event.target.value) : event.target.value;
+        setTicket({ ...ticket, [prop]: value });
     };
 
     const onChangeDatePicker = (prop) => (date, value) => {
@@ -36,9 +51,20 @@ export const Ticket = (props) => {
     return <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <Box>
 
-            <Typography variant="h3">
-                Ticket {ticket.index}
-            </Typography>
+            <AppBar position="static">
+                <Toolbar>
+                    <IconButton edge="start" color="inherit" aria-label="tickets" href={"/tickets"}>
+                        <ArrowBackIcon fontSize="large" />
+                    </IconButton >
+                    <ConfirmationNumberIcon fontSize="large" />
+                    <Typography className={classes.title} variant="h5">
+                        Ticket #{ticket.index}
+                    </Typography>
+                    <IconButton color="inherit" aria-label="tickets" href={"/tickets"}>
+                        <SaveIcon fontSize="large" />
+                    </IconButton >
+                </Toolbar>
+            </AppBar>
 
             <form noValidate autoComplete="off">
 
@@ -53,7 +79,7 @@ export const Ticket = (props) => {
 
                 <Grid container spacing={2} className={classes.marginTop}>
 
-                    <Grid item xs={12} sm={4}>
+                    <Grid item xs={12} sm={3}>
                         <FormControl fullWidth>
                             <KeyboardDatePicker
                                 label="Date d'ouverture"
@@ -67,7 +93,7 @@ export const Ticket = (props) => {
                         </FormControl>
                     </Grid>
 
-                    <Grid item xs={12} sm={4}>
+                    <Grid item xs={12} sm={3}>
                         <FormControl fullWidth>
                             <KeyboardDatePicker
                                 label="Date de clôture"
@@ -81,11 +107,56 @@ export const Ticket = (props) => {
                         </FormControl>
                     </Grid>
 
-                    <Grid item xs={12} sm={4}>
+                    <Grid item xs={12} sm={3}>
                         <FormControl fullWidth>
                             <UrgencySelect
                                 value={ticket.urgency}
-                                onChange={onChangeInput("urgency")}
+                                onChange={onChangeInput("urgency", true)}
+                            />
+                        </FormControl>
+                    </Grid>
+
+                    <Grid item xs={12} sm={3}>
+                        <FormControl fullWidth>
+                            <CategorySelect
+                                value={ticket.category}
+                                onChange={onChangeInput("category")}
+                            />
+                        </FormControl>
+                    </Grid>
+
+                </Grid>
+
+                <Grid container spacing={2} className={classes.marginTop}>
+
+                    <Grid item xs={12} sm={6}>
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="ticket-requester">Demandeur</InputLabel>
+                            <Input
+                                id="ticket-requester"
+                                onChange={onChangeInput("requester")}
+                                startAdornment={
+                                    <InputAdornment position="start">
+                                        <RecordVoiceOverIcon />
+                                    </InputAdornment>
+                                }
+                                value={ticket.requester}
+                            />
+                        </FormControl>
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                        <FormControl fullWidth>
+                            <InputLabel htmlFor="ticket-tech">Technicien</InputLabel>
+                            <Input
+                                id="ticket-tech"
+                                onChange={onChangeInput("tech")}
+                                startAdornment={
+                                    <InputAdornment position="start">
+                                        <BuildIcon />
+                                    </InputAdornment>
+                                }
+                                value={ticket.tech}
                             />
                         </FormControl>
                     </Grid>
