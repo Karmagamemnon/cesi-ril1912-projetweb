@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import AppBar from '@material-ui/core/AppBar';
@@ -8,10 +8,9 @@ import IconButton from '@material-ui/core/IconButton';
 import HomeIcon from '@material-ui/icons/Home';
 import Typography from '@material-ui/core/Typography';
 
-
 const useStyles = makeStyles(
     (theme) => ({
-        menuButton: { marginRight: theme.spacing(2) },
+        homeButton: { marginRight: theme.spacing(2) },
         link: { color: "white" },
     })
 );
@@ -20,24 +19,22 @@ export const Layout = (props) => {
 
     const classes = useStyles();
 
-    return <Fragment>
-        <Container maxWidth="md">
-            <AppBar position="static">
-                <Toolbar>
-                    <Link href="/" color="inherit">
-                        <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-                            <HomeIcon fontSize="large" color="inherit" />
-                        </IconButton>
+    return <Container maxWidth="md">
+        <AppBar position="static">
+            <Toolbar>
+                <Link href="/" color="inherit">
+                    <IconButton edge="start" className={classes.homeButton} color="inherit" aria-label="menu">
+                        <HomeIcon fontSize="large" color="inherit" />
+                    </IconButton>
+                </Link>
+                <Typography className={classes.link} variant="h5">
+                    <Link href="/tickets" color="inherit" underline="none">
+                        Tickets
                     </Link>
-                    <Typography className={classes.link}>
-                        <Link href="/tickets" color="inherit">
-                            Tickets
-                        </Link>
-                    </Typography>
-                </Toolbar>
-            </AppBar>
-            {props.children}
-        </Container>
-    </Fragment>
+                </Typography>
+            </Toolbar>
+        </AppBar>
+        {props.children}
+    </Container>
 
 }
