@@ -38,14 +38,18 @@ export const Ticket = (props) => {
 
     const [ticket, setTicket] = React.useState(props.ticket);
 
+    const onChangeDatePicker = (prop) => (date, value) => {
+        setTicket({ ...ticket, [prop]: value });
+    };
+
     const onChangeInput = (prop, shouldParseInt) => (event) => {
         shouldParseInt = shouldParseInt || false;
         const value = shouldParseInt ? parseInt(event.target.value) : event.target.value;
         setTicket({ ...ticket, [prop]: value });
     };
 
-    const onChangeDatePicker = (prop) => (date, value) => {
-        setTicket({ ...ticket, [prop]: value });
+    const save = () => {
+        console.log('onClick');
     };
 
     return <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -60,7 +64,7 @@ export const Ticket = (props) => {
                     <Typography className={classes.title} variant="h5">
                         Ticket #{ticket.index}
                     </Typography>
-                    <IconButton color="inherit" aria-label="tickets" href={"/tickets"}>
+                    <IconButton color="inherit" aria-label="tickets" onClick={save}>
                         <SaveIcon fontSize="large" />
                     </IconButton >
                 </Toolbar>

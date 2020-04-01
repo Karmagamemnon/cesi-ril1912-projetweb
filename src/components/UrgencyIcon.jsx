@@ -6,11 +6,11 @@ export const UrgencyIcon = (props) => {
 
     const getColor = () => {
         switch (props.urgency) {
-            case 1: return "lightblue";
-            case 2: return "blue";
+            case 1: return "deepskyblue";
+            case 2: return "lightskyblue";
             case 4: return "orange";
             case 5: return "red";
-            default: return "grey";
+            default: return "gold";
         }
     }
 

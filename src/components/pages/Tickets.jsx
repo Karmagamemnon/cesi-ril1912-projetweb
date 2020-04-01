@@ -11,6 +11,7 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import AlarmIcon from '@material-ui/icons/Alarm';
 
 import Grid from '@material-ui/core/Grid';
 
@@ -19,9 +20,7 @@ import Grid from '@material-ui/core/Grid';
 // import Delete from '@material-ui/icons/Delete';
 import Button from '@material-ui/core/Button';
 
-
-
-
+import { UrgencyIcon } from '../UrgencyIcon';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -61,7 +60,7 @@ export const Tickets = (props) => {
                         <Typography >#</Typography>
                     </Grid>
                     <Grid item xs={1}>
-                        <Typography >!</Typography>
+                        <AlarmIcon />
                     </Grid>
                     <Grid item xs={8} align="center">
                         <Typography >Title</Typography>
@@ -84,7 +83,7 @@ export const Tickets = (props) => {
                                 <Typography >{row.index}</Typography>
                             </Grid>
                             <Grid item xs={1} align="left">
-                                <Typography >{row.urgency}</Typography>
+                                <UrgencyIcon urgency={row.urgency} />
                             </Grid>
                             <Grid item xs={8} align="left">
                                 <Typography >{row.title}</Typography>
