@@ -9,7 +9,7 @@ import Select from '@material-ui/core/Select';
 import { UrgencyIcon } from './UrgencyIcon';
 
 const useStyles = makeStyles((theme) => ({
-    urgencyIcon: { margin: "0 2px 2px 0" },
+    urgencyIcon: { margin: "0 2px 2px" },
     urgencySelect: { flexGrow: 1 }
 }));
 
@@ -17,7 +17,7 @@ export const UrgencySelect = (props) => {
 
     const classes = useStyles();
 
-    return <Grid container alignItems="flex-end">
+    return <Grid container direction={props.reverse ? "row-reverse" : "row"} alignItems="flex-end">
         <Grid item className={classes.urgencyIcon}>
             <UrgencyIcon urgency={props.value} />
         </Grid>
@@ -46,9 +46,11 @@ export const UrgencySelect = (props) => {
 
 UrgencySelect.propTypes = {
     onChange: PropTypes.func.isRequired,
+    reverse: PropTypes.bool,
     value: PropTypes.number.isRequired
 };
 
 UrgencySelect.defaultProps = {
+    reverse: false,
     value: 3
 };

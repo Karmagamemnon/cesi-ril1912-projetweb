@@ -36,7 +36,7 @@ export const Layout = (props) => {
                 <Typography className={classes.link} variant="h5">
                     <Link to="/" style={{ color: 'inherit', textDecoration: "none" }}>
                         Tickets
-                        </Link>
+                    </Link>
                 </Typography>
             </Toolbar>
         </AppBar>
