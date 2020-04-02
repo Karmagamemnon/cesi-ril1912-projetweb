@@ -2,6 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { App } from './components/App';
 import * as serviceWorker from './serviceWorker';
+import data from './data/data.json'
+
+if (localStorage.getItem("tickets") === null)
+    localStorage.setItem("tickets", JSON.stringify(data));
 
 ReactDOM.render(
     <React.StrictMode >

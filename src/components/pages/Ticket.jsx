@@ -22,6 +22,7 @@ import SaveIcon from '@material-ui/icons/Save';
 
 import { CategorySelect } from '../CategorySelect';
 import { UrgencySelect } from '../UrgencySelect';
+import { TicketController } from '../../data/TicketController';
 
 const useStyles = makeStyles((theme) => ({
     marginTop: { marginTop: theme.spacing(2) },
@@ -49,7 +50,7 @@ export const Ticket = (props) => {
     };
 
     const save = () => {
-        console.log('onClick');
+        TicketController.updateTicket(ticket);
     };
 
     return <MuiPickersUtilsProvider utils={DateFnsUtils}>
