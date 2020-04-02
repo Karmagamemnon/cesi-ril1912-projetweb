@@ -13,7 +13,10 @@ import HomeIcon from '@material-ui/icons/Home';
 
 const useStyles = makeStyles(
     (theme) => ({
-        content: { backgroundColor: "white" },
+        content: {
+            backgroundColor: "white",
+            minHeight: "90vh"
+        },
         homeButton: { marginRight: theme.spacing(2) },
         link: { color: "white" },
     })
