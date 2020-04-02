@@ -104,6 +104,13 @@ export const Tickets = (props) => {
         setTickets(TicketController.getTickets());
     };
 
+    const handleSearch = (event) => {
+        console.log(event.target.value);
+        
+        setTickets(TicketController.searchTicket(event.target.value));
+        // setTickets(TicketController.getTickets());
+    }
+
 
     return (
         <div className={classes.root}>
@@ -137,6 +144,7 @@ export const Tickets = (props) => {
                             }}
                             inputProps={{ 'aria-label': 'rechercher' }}
                             placeholder="Rechercher..."
+                            onChange={handleSearch}
                         />
                     </Box>
                     <IconButton aria-label="filtres" color="inherit">
@@ -162,10 +170,10 @@ export const Tickets = (props) => {
                         <WhatshotIcon />
                     </Grid>
                     <Grid item xs={8}>
-                        <Typography >Title</Typography>
+                        <Typography >Titre</Typography>
                     </Grid>
                     <Grid item xs={2}>
-                        <Typography >Category</Typography>
+                        <Typography >Catégorie</Typography>
                     </Grid>
                 </Grid>
             </ExpansionPanelSummary>

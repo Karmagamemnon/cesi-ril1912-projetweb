@@ -41,7 +41,7 @@ export class TicketController {
     }
 
     static deleteTicket(idTicket) {
-        let tickets = JSON.parse(localStorage.getItem("tickets"));
+        let tickets = this.getTickets();
         for (let i = 0; i < tickets.length; i++) {
             if (tickets[i].index === idTicket) {
                 tickets.splice(i, 1);
@@ -49,5 +49,16 @@ export class TicketController {
             }
         }
         localStorage.setItem("tickets", JSON.stringify(tickets));
+    }
+
+    static searchTicket(str) {
+        let searchResult = [];
+        let tickets = this.getTickets();
+        for (let i = 0; i < tickets.length; i++) {
+            if (tickets[i].title.includes(str) || tickets[i].description.includes(str) || tickets[i].category.includes(str)) {
+                searchResult.push(tickets[i]);
+            }
+        }
+        return searchResult;
     }
 }
