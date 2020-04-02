@@ -13,6 +13,12 @@ import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import Moment from 'react-moment';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 import AddIcon from '@material-ui/icons/Add';
 import SearchIcon from '@material-ui/icons/Search';
@@ -85,8 +91,44 @@ export const Tickets = (props) => {
         setExpanded(isExpanded ? panel : false);
     };
 
+    // DIALOG
+    const [open, setOpen] = React.useState(false);
+
+    const [idTicketActif, setIdTicketActif] = React.useState(false);
+    const handleClickOpen = (id) => () => {
+        setOpen(true);
+        setIdTicketActif(id);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleConfirm = () => {
+        TicketController.deleteTicket(idTicketActif);
+        setOpen(false);
+        setTickets(TicketController.getTickets());
+    };
+
+
     return (
         <div className={classes.root}>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"Voulez-vous supprimer le ticket ?"}</DialogTitle>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        Non
+                                            </Button>
+                    <Button onClick={handleConfirm} color="primary" autoFocus>
+                        Oui
+                                        </Button>
+                </DialogActions>
+            </Dialog>
 
             <AppBar position="static">
                 <Toolbar>
@@ -155,20 +197,29 @@ export const Tickets = (props) => {
                     <ExpansionPanelDetails>
                         <div className={classes.root}>
                             <Grid container spacing={3} >
-                                <Grid item xs={12}>
-                                    <Typography>Post by {row.requester} - {row.openDate} - For {row.tech}</Typography>
+                                <Grid item xs={6}>
+                                    <Typography>Demande faite par {row.requester}</Typography>
+                                </Grid>
+                                <Grid item xs={6} align="right">
+                                    <Typography>Le <Moment format="DD/MM/YYYY">
+                                        {row.openDate}
+                                    </Moment></Typography>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <Typography>Status : {row.state}</Typography>
+                                    <Typography>Attribuée à {row.tech}</Typography>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Typography>Statut : {row.state}</Typography>
                                 </Grid>
                                 <Grid item xs={12} >
                                     <Typography fontWeight="fontWeightBold" >Description :</Typography>
                                     <Typography>{row.description}</Typography>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <Button variant="contained" color="secondary" href="#contained-buttons">
+                                    <Button variant="contained" color="secondary" onClick={handleClickOpen(row.index)}>
                                         Supprimer
                                     </Button>
+
                                 </Grid>
                                 <Grid item xs={6} align="right">
                                     <Button variant="contained" color="primary" href={"/tickets/" + row.index} >
