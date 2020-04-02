@@ -1,10 +1,9 @@
 import React from 'react';
 import { fade, makeStyles } from '@material-ui/core/styles';
-import AlarmIcon from '@material-ui/icons/Alarm';
+import { Link } from "react-router-dom";
 import AppBar from '@material-ui/core/AppBar';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -21,7 +20,10 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 import AddIcon from '@material-ui/icons/Add';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import FilterListIcon from '@material-ui/icons/FilterList';
 import SearchIcon from '@material-ui/icons/Search';
+import WhatshotIcon from '@material-ui/icons/Whatshot';
 import { UrgencyIcon } from '../UrgencyIcon';
 
 import { TicketController } from '../../data/TicketController';
@@ -31,15 +33,7 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         flexGrow: 1,
     },
-    heading: {
-        fontSize: theme.typography.pxToRem(15),
-        flexBasis: '33.33%',
-        flexShrink: 0,
-    },
-    secondaryHeading: {
-        fontSize: theme.typography.pxToRem(15),
-        color: theme.palette.text.secondary,
-    },
+    header: { paddingRight: "40px" },
     search: {
         position: 'relative',
         borderRadius: theme.shape.borderRadius,
@@ -137,32 +131,37 @@ export const Tickets = (props) => {
                             <SearchIcon />
                         </Box>
                         <InputBase
-                            placeholder="Search…"
                             classes={{
                                 root: classes.inputRoot,
                                 input: classes.inputInput,
                             }}
-                            inputProps={{ 'aria-label': 'search' }}
+                            inputProps={{ 'aria-label': 'rechercher' }}
+                            placeholder="Rechercher..."
                         />
                     </Box>
-                    <IconButton color="inherit" aria-label="tickets" href="tickets/new">
-                        <AddIcon fontSize="large" />
+                    <IconButton aria-label="filtres" color="inherit">
+                        <FilterListIcon fontSize="large" />
+                    </IconButton >
+                    <IconButton aria-label="nouveau-ticket" color="inherit">
+                        <Link to="/tickets/new" style={{ color: 'inherit' }}>
+                            <AddIcon fontSize="large" />
+                        </Link>
                     </IconButton >
                 </Toolbar>
             </AppBar>
 
             <ExpansionPanelSummary
-                aria-controls="panel1bh-content"
-                id="panel1bh-header"
+                aria-controls="header-liste"
+                id="header-liste"
             >
-                <Grid container spacing={1}>
+                <Grid container className={classes.header} spacing={1}>
                     <Grid item xs={1}>
                         <Typography >#</Typography>
                     </Grid>
                     <Grid item xs={1}>
-                        <AlarmIcon />
+                        <WhatshotIcon />
                     </Grid>
-                    <Grid item xs={8} align="center">
+                    <Grid item xs={8}>
                         <Typography >Title</Typography>
                     </Grid>
                     <Grid item xs={2}>
@@ -171,25 +170,25 @@ export const Tickets = (props) => {
                 </Grid>
             </ExpansionPanelSummary>
 
-            {tickets.map((row) => (
-                <ExpansionPanel expanded={expanded === row.index} onChange={handleChange(row.index)}>
+            {tickets.map((ticket) => (
+                <ExpansionPanel key={ticket.index} expanded={expanded === ticket.index} onChange={handleChange(ticket.index)}>
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel1bh-content"
-                        id="panel1bh-header"
+                        aria-controls={"expansion-panel-" + ticket.index}
+                        id={"expansion-panel-" + ticket.index}
                     >
                         <Grid container spacing={1}>
-                            <Grid item xs={1} align="left">
-                                <Typography >{row.index}</Typography>
+                            <Grid item xs={1}>
+                                <Typography >{ticket.index}</Typography>
                             </Grid>
-                            <Grid item xs={1} align="left">
-                                <UrgencyIcon urgency={row.urgency} />
+                            <Grid item xs={1}>
+                                <UrgencyIcon urgency={ticket.urgency} />
                             </Grid>
-                            <Grid item xs={8} align="left">
-                                <Typography >{row.title}</Typography>
+                            <Grid item xs={8}>
+                                <Typography >{ticket.title}</Typography>
                             </Grid>
-                            <Grid item xs={2} align="center">
-                                <Typography >{row.category}</Typography>
+                            <Grid item xs={2}>
+                                <Typography >{ticket.category}</Typography>
                             </Grid>
                         </Grid>
 
@@ -198,31 +197,31 @@ export const Tickets = (props) => {
                         <div className={classes.root}>
                             <Grid container spacing={3} >
                                 <Grid item xs={6}>
-                                    <Typography>Demande faite par {row.requester}</Typography>
+                                    <Typography>Demande faite par {ticket.requester}</Typography>
                                 </Grid>
                                 <Grid item xs={6} align="right">
                                     <Typography>Le <Moment format="DD/MM/YYYY">
-                                        {row.openDate}
+                                        {ticket.openDate}
                                     </Moment></Typography>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <Typography>Attribuée à {row.tech}</Typography>
+                                    <Typography>Attribuée à {ticket.tech}</Typography>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <Typography>Statut : {row.state}</Typography>
+                                    <Typography>Statut : {ticket.state}</Typography>
                                 </Grid>
                                 <Grid item xs={12} >
                                     <Typography fontWeight="fontWeightBold" >Description :</Typography>
-                                    <Typography>{row.description}</Typography>
+                                    <Typography>{ticket.description}</Typography>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <Button variant="contained" color="secondary" onClick={handleClickOpen(row.index)}>
+                                    <Button variant="contained" color="secondary" onClick={handleClickOpen(ticket.index)}>
                                         Supprimer
                                     </Button>
 
                                 </Grid>
                                 <Grid item xs={6} align="right">
-                                    <Button variant="contained" color="primary" href={"/tickets/" + row.index} >
+                                    <Button variant="contained" color="primary" href={"/tickets/" + ticket.index} >
                                         Modifier
                                     </Button>
                                 </Grid>

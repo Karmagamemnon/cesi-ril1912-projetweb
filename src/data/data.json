@@ -126,7 +126,7 @@
         "state": "En cours",
         "requester": "Salas",
         "tech": "Huffman",
-        "category": "orange"
+        "category": "Authentification"
     },
     {
         "_id": "5e849bab65c129344ed3b2d7",
@@ -165,7 +165,7 @@
         "state": "Terminé",
         "requester": "Lowe",
         "tech": "Romero",
-        "category": "orange"
+        "category": "Authentification"
     },
     {
         "_id": "5e849bab276240731a3a2caf",
@@ -178,7 +178,7 @@
         "state": "Nouveau",
         "requester": "Adams",
         "tech": "Jamie",
-        "category": "grape"
+        "category": "Bug"
     },
     {
         "_id": "5e849babd6985fe52d619417",
