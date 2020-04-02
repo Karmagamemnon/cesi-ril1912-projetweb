@@ -26,6 +26,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import WhatshotIcon from '@material-ui/icons/Whatshot';
 import { UrgencyIcon } from '../UrgencyIcon';
 
+import { DrawerFiltres } from '../DrawerFiltres';
+
 import { TicketController } from '../../data/TicketController';
 
 const useStyles = makeStyles((theme) => ({
@@ -77,6 +79,9 @@ export const Tickets = (props) => {
 
     const classes = useStyles();
 
+    // FILTRES
+    const [isOpenDrawerFiltres, setIsOpenDrawerFiltres] = React.useState(false);
+
     // PANEL
     const [tickets, setTickets] = React.useState(TicketController.getTickets());
     const [expanded, setExpanded] = React.useState(false);
@@ -104,6 +109,13 @@ export const Tickets = (props) => {
         setTickets(TicketController.getTickets());
     };
 
+    const openDrawerFiltres = () => {
+        setIsOpenDrawerFiltres(true);
+    };
+
+    const closeDrawerFiltres = () => {
+        setIsOpenDrawerFiltres(false);
+    };
 
     return (
         <div className={classes.root}>
@@ -139,7 +151,7 @@ export const Tickets = (props) => {
                             placeholder="Rechercher..."
                         />
                     </Box>
-                    <IconButton aria-label="filtres" color="inherit">
+                    <IconButton aria-label="filtres" color="inherit" onClick={openDrawerFiltres}>
                         <FilterListIcon fontSize="large" />
                     </IconButton >
                     <IconButton aria-label="nouveau-ticket" color="inherit">
@@ -231,6 +243,11 @@ export const Tickets = (props) => {
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
             ))}
+
+            <DrawerFiltres
+                isOpen={isOpenDrawerFiltres}
+                onClose={closeDrawerFiltres}
+            />
         </div>
     );
 
