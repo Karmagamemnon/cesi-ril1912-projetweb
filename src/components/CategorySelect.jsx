@@ -17,11 +17,10 @@ export const CategorySelect = (props) => {
             onChange={props.onChange}
             value={props.value}
         >
-            <option value={"banana"}>banana</option>
-            <option value={"apple"}>apple</option>
-            <option value={"peach"}>peach</option>
-            <option value={"strawberry"}>strawberry</option>
-            <option value={"pineapple"}>pineapple</option>
+            <option value={"Autre"}>Autre</option>
+            <option value={"Bug"}>Bug</option>
+            <option value={"Ergonomie"}>Ergonomie</option>
+            <option value={"Evolution"}>Evolution</option>
         </Select>
     </FormControl>
 }

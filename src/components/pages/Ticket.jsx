@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+import { Redirect } from "react-router-dom";
 import AppBar from '@material-ui/core/AppBar';
 import Box from '@material-ui/core/Box';
 import DateFnsUtils from '@date-io/date-fns';
@@ -37,7 +38,14 @@ export const Ticket = (props) => {
 
     const classes = useStyles();
 
-    const [ticket, setTicket] = React.useState(props.ticket);
+    const [ticket, setTicket] = React.useState(TicketController.getTicket(props.match.params.ticketId));
+    const [title, setTitle] = React.useState("Nouveau ticket");
+    const [redirect, setRedirect] = React.useState(false);
+
+    React.useEffect(() => {
+        if (ticket.index > 0)
+            setTitle("Ticket #" + ticket.index);
+    }, [ticket]);
 
     const onChangeDatePicker = (prop) => (date, value) => {
         setTicket({ ...ticket, [prop]: value });
@@ -50,139 +58,142 @@ export const Ticket = (props) => {
     };
 
     const save = () => {
-        TicketController.updateTicket(ticket);
+        if (ticket.index > 0) TicketController.updateTicket(ticket);
+        else TicketController.addTicket(ticket);
+        setRedirect(true);
     };
 
-    return <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <Box>
+    return redirect ? <Redirect to="/tickets" /> :
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <Box>
 
-            <AppBar position="static">
-                <Toolbar>
-                    <IconButton edge="start" color="inherit" aria-label="tickets" href={"/tickets"}>
-                        <ArrowBackIcon fontSize="large" />
-                    </IconButton >
-                    <ConfirmationNumberIcon fontSize="large" />
-                    <Typography className={classes.title} variant="h5">
-                        Ticket #{ticket.index}
-                    </Typography>
-                    <IconButton color="inherit" aria-label="tickets" onClick={save}>
-                        <SaveIcon fontSize="large" />
-                    </IconButton >
-                </Toolbar>
-            </AppBar>
+                <AppBar position="static">
+                    <Toolbar>
+                        <IconButton edge="start" color="inherit" aria-label="tickets" href={"/tickets"}>
+                            <ArrowBackIcon fontSize="large" />
+                        </IconButton >
+                        <ConfirmationNumberIcon fontSize="large" />
+                        <Typography className={classes.title} variant="h5">
+                            {title}
+                        </Typography>
+                        <IconButton color="inherit" aria-label="tickets" onClick={save}>
+                            <SaveIcon fontSize="large" />
+                        </IconButton >
+                    </Toolbar>
+                </AppBar>
 
-            <form noValidate autoComplete="off">
+                <form noValidate autoComplete="off">
 
-                <FormControl fullWidth className={classes.marginTop}>
-                    <InputLabel htmlFor="ticket-title">Titre</InputLabel>
-                    <Input
-                        id="ticket-title"
-                        onChange={onChangeInput("title")}
-                        value={ticket.title}
-                    />
-                </FormControl>
+                    <FormControl fullWidth className={classes.marginTop}>
+                        <InputLabel htmlFor="ticket-title">Titre</InputLabel>
+                        <Input
+                            id="ticket-title"
+                            onChange={onChangeInput("title")}
+                            value={ticket.title}
+                        />
+                    </FormControl>
 
-                <Grid container spacing={2} className={classes.marginTop}>
+                    <Grid container spacing={2} className={classes.marginTop}>
 
-                    <Grid item xs={12} sm={3}>
-                        <FormControl fullWidth>
-                            <KeyboardDatePicker
-                                label="Date d'ouverture"
-                                format="dd/MM/yyyy"
-                                value={ticket.openDate}
-                                onChange={onChangeDatePicker("openDate")}
-                                KeyboardButtonProps={{
-                                    "aria-label": "modifier date d'ouverture",
-                                }}
-                            />
-                        </FormControl>
+                        <Grid item xs={12} sm={3}>
+                            <FormControl fullWidth>
+                                <KeyboardDatePicker
+                                    label="Date d'ouverture"
+                                    format="dd/MM/yyyy"
+                                    value={ticket.openDate}
+                                    onChange={onChangeDatePicker("openDate")}
+                                    KeyboardButtonProps={{
+                                        "aria-label": "modifier date d'ouverture",
+                                    }}
+                                />
+                            </FormControl>
+                        </Grid>
+
+                        <Grid item xs={12} sm={3}>
+                            <FormControl fullWidth>
+                                <KeyboardDatePicker
+                                    label="Date de clôture"
+                                    format="dd/MM/yyyy"
+                                    value={ticket.closeDate}
+                                    onChange={onChangeDatePicker("closeDate")}
+                                    KeyboardButtonProps={{
+                                        "aria-label": "modifier date de clôture",
+                                    }}
+                                />
+                            </FormControl>
+                        </Grid>
+
+                        <Grid item xs={12} sm={3}>
+                            <FormControl fullWidth>
+                                <UrgencySelect
+                                    value={ticket.urgency}
+                                    onChange={onChangeInput("urgency", true)}
+                                />
+                            </FormControl>
+                        </Grid>
+
+                        <Grid item xs={12} sm={3}>
+                            <FormControl fullWidth>
+                                <CategorySelect
+                                    value={ticket.category}
+                                    onChange={onChangeInput("category")}
+                                />
+                            </FormControl>
+                        </Grid>
+
                     </Grid>
 
-                    <Grid item xs={12} sm={3}>
-                        <FormControl fullWidth>
-                            <KeyboardDatePicker
-                                label="Date de clôture"
-                                format="dd/MM/yyyy"
-                                value={ticket.closeDate}
-                                onChange={onChangeDatePicker("closeDate")}
-                                KeyboardButtonProps={{
-                                    "aria-label": "modifier date de clôture",
-                                }}
-                            />
-                        </FormControl>
+                    <Grid container spacing={2} className={classes.marginTop}>
+
+                        <Grid item xs={12} sm={6}>
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="ticket-requester">Demandeur</InputLabel>
+                                <Input
+                                    id="ticket-requester"
+                                    onChange={onChangeInput("requester")}
+                                    startAdornment={
+                                        <InputAdornment position="start">
+                                            <RecordVoiceOverIcon />
+                                        </InputAdornment>
+                                    }
+                                    value={ticket.requester}
+                                />
+                            </FormControl>
+                        </Grid>
+
+                        <Grid item xs={12} sm={6}>
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor="ticket-tech">Technicien</InputLabel>
+                                <Input
+                                    id="ticket-tech"
+                                    onChange={onChangeInput("tech")}
+                                    startAdornment={
+                                        <InputAdornment position="start">
+                                            <BuildIcon />
+                                        </InputAdornment>
+                                    }
+                                    value={ticket.tech}
+                                />
+                            </FormControl>
+                        </Grid>
+
                     </Grid>
 
-                    <Grid item xs={12} sm={3}>
-                        <FormControl fullWidth>
-                            <UrgencySelect
-                                value={ticket.urgency}
-                                onChange={onChangeInput("urgency", true)}
-                            />
-                        </FormControl>
-                    </Grid>
+                    <FormControl fullWidth className={classes.marginTop}>
+                        <InputLabel htmlFor="ticket-description">Description</InputLabel>
+                        <Input
+                            id="ticket-description"
+                            multiline
+                            onChange={onChangeInput("description")}
+                            value={ticket.description}
+                        />
+                    </FormControl>
 
-                    <Grid item xs={12} sm={3}>
-                        <FormControl fullWidth>
-                            <CategorySelect
-                                value={ticket.category}
-                                onChange={onChangeInput("category")}
-                            />
-                        </FormControl>
-                    </Grid>
+                </form>
 
-                </Grid>
+            </Box>
 
-                <Grid container spacing={2} className={classes.marginTop}>
-
-                    <Grid item xs={12} sm={6}>
-                        <FormControl fullWidth>
-                            <InputLabel htmlFor="ticket-requester">Demandeur</InputLabel>
-                            <Input
-                                id="ticket-requester"
-                                onChange={onChangeInput("requester")}
-                                startAdornment={
-                                    <InputAdornment position="start">
-                                        <RecordVoiceOverIcon />
-                                    </InputAdornment>
-                                }
-                                value={ticket.requester}
-                            />
-                        </FormControl>
-                    </Grid>
-
-                    <Grid item xs={12} sm={6}>
-                        <FormControl fullWidth>
-                            <InputLabel htmlFor="ticket-tech">Technicien</InputLabel>
-                            <Input
-                                id="ticket-tech"
-                                onChange={onChangeInput("tech")}
-                                startAdornment={
-                                    <InputAdornment position="start">
-                                        <BuildIcon />
-                                    </InputAdornment>
-                                }
-                                value={ticket.tech}
-                            />
-                        </FormControl>
-                    </Grid>
-
-                </Grid>
-
-                <FormControl fullWidth className={classes.marginTop}>
-                    <InputLabel htmlFor="ticket-description">Description</InputLabel>
-                    <Input
-                        id="ticket-description"
-                        multiline
-                        onChange={onChangeInput("description")}
-                        value={ticket.description}
-                    />
-                </FormControl>
-
-            </form>
-
-        </Box>
-
-    </MuiPickersUtilsProvider>
+        </MuiPickersUtilsProvider>
 
 }
 
