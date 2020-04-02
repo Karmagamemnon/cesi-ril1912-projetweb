@@ -8,13 +8,7 @@ import { Ticket } from './pages/Ticket';
 export const App = (props) => {
 
     return <Layout>
-        <Router>
-            <Switch>
-                <Route exact path='/' component={Tickets} />
-                <Route exact path='/tickets' component={Tickets} />
-                <Route exact path='/tickets/:ticketId' component={Ticket} />
-            </Switch>
-        </Router>
+        {props.children}
     </Layout>
 
 }

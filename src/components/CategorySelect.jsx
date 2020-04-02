@@ -21,6 +21,7 @@ export const CategorySelect = (props) => {
             <option value={"Bug"}>Bug</option>
             <option value={"Ergonomie"}>Ergonomie</option>
             <option value={"Evolution"}>Evolution</option>
+            <option value={"Authentification"}>Authentification</option>
         </Select>
     </FormControl>
 }
